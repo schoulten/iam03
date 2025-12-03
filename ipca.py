@@ -267,15 +267,16 @@ previsao1 = (
     .reset_index()
     .rename(
       columns = {
-        "index": "horizonte",
-        "pred": "previsao",
+        "index": "data",
+        "pred": "valor",
         "lower_bound": "ic_inferior",
         "upper_bound": "ic_superior"
       }
     )
     .assign(
-      modelo = "Ridge",
-      data = pd.Timestamp.today()
+      variavel = "IPCA",
+      tipo = "Ridge",
+      previsao = pd.Timestamp.today()
       )
 )
 
@@ -289,17 +290,20 @@ previsao2 = (
     .reset_index()
     .rename(
       columns = {
-        "index": "horizonte",
-        "pred": "previsao",
+        "index": "data",
+        "pred": "valor",
         "lower_bound": "ic_inferior",
         "upper_bound": "ic_superior"
       }
     )
     .assign(
-      modelo = "Huber",
-      data = pd.Timestamp.today()
+      variavel = "IPCA",
+      tipo = "Huber",
+      previsao = pd.Timestamp.today()
     )
 )
 
 # Salvar previsões
-pd.concat([previsao1, previsao2]).to_parquet(pasta + "df_previsao.parquet")
+df_previsao = pd.concat([previsao1, previsao2])
+df_previsao.drop(labels = "previsao", axis = "columns").to_parquet(pasta + "df_previsao.parquet")
+df_previsao.to_csv(pasta + "tracking.csv", mode = "a", index = False, header = False)
