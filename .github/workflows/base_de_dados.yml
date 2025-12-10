@@ -29,9 +29,7 @@ jobs:
         run: poetry install --no-root
 
       - name: Atualizar base de dados
-        run: |
-          poetry config virtualenvs.prefer-active-python true
-          poetry run python etl.py
+        run: poetry run python etl.py
 
       - name: Commit & Push
         uses: stefanzweifel/git-auto-commit-action@v7
