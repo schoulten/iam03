@@ -1,0 +1,37 @@
+name: Automação das previsões
+
+on:
+  push:
+    branches: [ 'main' ]
+  schedule:
+    - cron: '0 0 15 * *'
+
+
+jobs:
+  Modelagem:
+    runs-on: ubuntu-24.04
+    
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v6
+
+      - name: Instalar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Instalar Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 2.2.1
+
+      - name: Instalar pacotes Python
+        run: poetry install --no-root
+
+      - name: Atualizar previsões
+        run: poetry run python ipca.py
+
+      - name: Commit & Push
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Atualização automática de previsões
