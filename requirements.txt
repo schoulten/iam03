@@ -3,3 +3,5 @@ shinywidgets
 pandas
 faicons
 plotly
+pyarrow
+fastparquet
